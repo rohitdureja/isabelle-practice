@@ -1,4 +1,4 @@
-theory Test
+theory Types
   imports Main
 begin
 declare [[names_short]]

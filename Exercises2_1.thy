@@ -1,4 +1,4 @@
-theory Exercises2
+theory Exercises2_1
   imports Main
 begin
 
@@ -57,7 +57,7 @@ fun count :: "'a \<Rightarrow> 'a list \<Rightarrow> nat" where
 "count x [] = 0" |
 "count x (Cons y xs) = (if x=y  then Suc (count x xs) else (count x xs))"
 
-theorem countlength[simp] : "(count x xs) \<le> List.length xs"
+theorem countlength : "(count x xs) \<le> List.length xs"
   apply(induction xs)
    apply(auto)
   done
@@ -73,16 +73,27 @@ fun reverse :: "'a list \<Rightarrow> 'a list" where
 "reverse Nil = Nil" |
 "reverse (Cons x xs) = snoc (reverse xs) x"
 
-lemma reverse_snoc
-
-theorem double_rev[simp] : "reverse (reverse xs) = xs"
+lemma snoc_reverse : "reverse(snoc xs a) = a # reverse xs"
   apply(induction xs)
    apply(auto)
+  done
 
 
+theorem double_rev : "reverse (reverse xs) = xs"
+  apply(induction xs)
+   apply(auto)
+  apply(simp add: snoc_reverse)
+  done
 
+(*---------------- Exercise 2.5----------------*)
+(* sum function *)
+fun sum_upto :: "nat \<Rightarrow> nat" where
+"sum_upto 0 = 0" |
+"sum_upto (Suc n) = (Suc n) + sum_upto n"
 
-
-
+theorem correct_sum : "sum_upto n = n * (n + 1) div 2"
+  apply(induction n)
+   apply(auto)
+  done
 
 end
