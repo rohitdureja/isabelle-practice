@@ -14,4 +14,15 @@ lemma mirror_mirror : "mirror (mirror t) = t"
    apply(auto)
   done
 
+fun lookup :: "('a * 'b) list \<Rightarrow> 'a \<Rightarrow> 'b option" where
+"lookup [] x = None" |
+"lookup ((a,b)#ps) x = (if x = a then Some b else lookup ps x)"
+
+definition sq :: "nat \<Rightarrow> nat" where
+"sq n = n * n"
+
+abbreviation sq' :: "nat \<Rightarrow> nat" where
+"sq' n == n * n"
+
+
 end
