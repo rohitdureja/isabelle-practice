@@ -1,14 +1,20 @@
+(*---------------- Exercise 2.1----------------*)
 theory Exercises2_1
   imports Main
 begin
 
-(*---------------- Exercise 2.1----------------*)
 value "1 + 2::nat"
 value "1 + 2::int"
 value "1 - 2::nat"
 value "1 - 2::int"
 
+end
+
 (*---------------- Exercise 2.2----------------*)
+theory Exercises2_2
+  imports Main
+begin
+
 (* add function *)
 fun add :: "nat \<Rightarrow> nat \<Rightarrow> nat" where
 "add m 0 = m" |
@@ -51,7 +57,14 @@ theorem double_add : "double m = add m m"
   apply(simp add: add_commutative)
   done
 
+end
+
+
 (*---------------- Exercise 2.3----------------*)
+theory Exercises2_3
+  imports Main
+begin
+
 (* count function *)
 fun count :: "'a \<Rightarrow> 'a list \<Rightarrow> nat" where
 "count x [] = 0" |
@@ -62,7 +75,13 @@ theorem countlength : "(count x xs) \<le> List.length xs"
    apply(auto)
   done
 
+end
+
 (*---------------- Exercise 2.4----------------*)
+theory Exercises2_4
+  imports Main
+begin
+
 (* snoc function -- reverse of cons *)
 fun snoc :: "'a list \<Rightarrow> 'a \<Rightarrow> 'a list" where
 "snoc Nil a = (Cons a Nil)" |
@@ -78,14 +97,17 @@ lemma snoc_reverse : "reverse(snoc xs a) = a # reverse xs"
    apply(auto)
   done
 
-
 theorem double_rev : "reverse (reverse xs) = xs"
   apply(induction xs)
    apply(auto)
   apply(simp add: snoc_reverse)
   done
 
+end
 (*---------------- Exercise 2.5----------------*)
+theory Exercises2_5
+  imports Main
+begin
 (* sum function *)
 fun sum_upto :: "nat \<Rightarrow> nat" where
 "sum_upto 0 = 0" |
