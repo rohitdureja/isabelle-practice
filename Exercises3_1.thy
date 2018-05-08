@@ -18,17 +18,6 @@ fun max_opt :: "int option \<Rightarrow> int option \<Rightarrow> int option" wh
 "max_opt None (Some b) = Some b" |
 "max_opt (Some a) (Some b) = Some(max a b)"
 
-(* lemmas about max_opt*)
-lemma max_opt_COMMUTATIVE : "max_opt a b = max_opt b a"
-  apply(induction a; induction b)
-     apply(auto)
-  done
-
-lemma max_opt_ASSOCIATIVE : "max_opt (max_opt a b) c = max_opt a (max_opt b c)"
-  apply(induction a; induction b; induction c)
-         apply(auto)
-  done
-
 (* find min among two int options *)
 fun min_opt :: "int option \<Rightarrow> int option \<Rightarrow> int option" where
 "min_opt None None = None" |
@@ -54,7 +43,7 @@ fun max_tree :: "int tree \<Rightarrow> int option" where
 (* find min element in subtree*)
 fun min_tree :: "int tree \<Rightarrow> int option" where
 "min_tree Tip = None" |
-"min_tree (Node l a r) = min_opt (Some a) (max_opt (min_tree l) (min_tree r))"
+"min_tree (Node l a r) = min_opt (Some a) (min_opt (min_tree l) (min_tree r))"
 
 (* check if tree is ordered *)
 fun ord :: "int tree \<Rightarrow> bool" where
@@ -74,14 +63,69 @@ theorem insert_correctness : "set (ins x t) = {x} \<union> (set t)"
    apply(auto)
   done
 
+lemma max_opt_some_y : "max_opt (Some a) y = max_opt y (Some a)"
+  apply(induction y)
+   apply(auto)
+  done
+
+lemma max_opt_some_xy : "max_opt (max_opt x (Some a)) y = max_opt x (max_opt y (Some a))"
+  apply(induction x; induction y)
+     apply(auto)
+  done
+
+lemma max_opt_cover : "max_opt (max_opt x y) z = max_opt x (max_opt y z)"
+  apply(induction x; induction y; induction z)
+         apply(auto)
+  done
+
 lemma max_insert : "max_tree (ins i t) = max_opt (Some i) (max_tree t)"
   apply(induction t)
-  apply(auto)
+   apply(auto simp add:max_opt_some_y)
+    apply(auto simp add:max_opt_some_xy)
+   apply(auto simp add:max_opt_cover)
+  done
+
+lemma less_max_opt : "less_opt x z \<Longrightarrow> less_opt y z \<Longrightarrow> less_opt (max_opt x y) z"
+  apply(induction x; induction y)
+     apply(auto)
+  done
+
+lemma min_opt_some_y : "min_opt (Some a) y = min_opt y (Some a)"
+  apply(induction y)
+   apply(auto)
+  done
+
+lemma min_opt_some_xy : "min_opt (min_opt x (Some a)) y = min_opt x (min_opt y (Some a))"
+  apply(induction x; induction y)
+     apply(auto)
+  done
+
+lemma min_opt_cover : "min_opt (min_opt x y) z = min_opt x (min_opt y z)"
+  apply(induction x; induction y; induction z)
+         apply(auto)
+  done
+
+lemma min_insert : "min_tree (ins i t) = min_opt (Some i) (min_tree t)"
+  apply(induction t)
+   apply(auto simp add:min_opt_some_y)
+    apply(auto simp add:min_opt_some_xy)
+   apply(auto simp add:min_opt_cover)
+  done
+
+lemma greater_min_opt : "greater_opt x z \<Longrightarrow> greater_opt y z \<Longrightarrow> greater_opt (min_opt x y) z"
+  apply(induction x; induction y)
+     apply(auto)
+  done
 
 (* theorem 2: preservation of order*)
 theorem order_correctness : "ord t \<Longrightarrow> ord (ins i t)"
   apply(induction t)
    apply(auto)
+   apply(auto simp add:max_insert)
+   apply(auto simp add:less_max_opt)
+  apply(auto simp add:min_insert)
+  apply(auto simp add:greater_min_opt)
+  done
 
 
 
