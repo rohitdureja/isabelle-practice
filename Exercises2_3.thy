@@ -2,28 +2,15 @@ theory Exercises2_3
   imports Main
 begin
 
-(*---------------- Exercise 2.9----------------*)
-(* add function *)
-fun add :: "nat \<Rightarrow> nat \<Rightarrow> nat" where
-"add 0 y = y" |
-"add (Suc x) y = Suc(add x y)"
+(*---------------- Exercise 2.3----------------*)
+(* count function *)
+fun count :: "'a \<Rightarrow> 'a list \<Rightarrow> nat" where
+"count x [] = 0" |
+"count x (Cons y xs) = (if x=y  then Suc (count x xs) else (count x xs))"
 
-(* tail recursive add function *)
-fun itadd :: "nat \<Rightarrow> nat \<Rightarrow> nat" where
-"itadd 0 y = y" |
-"itadd (Suc x) y = itadd x (Suc y)"
-
-lemma suc_add : "add x (Suc y) = add (Suc x) y"
-  apply(induction x)
+theorem countlength : "(count x xs) \<le> List.length xs"
+  apply(induction xs)
    apply(auto)
   done
-
-theorem itadd_add : "itadd x y = add x y"
-  apply(induction x arbitrary: y)
-  apply(auto)
-   apply(simp add: suc_add)
-  done
-
-
 
 end
