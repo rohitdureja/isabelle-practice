@@ -1,4 +1,4 @@
-theory Exercises3_1
+theory Exercises3_01
   imports Main
 begin
 
