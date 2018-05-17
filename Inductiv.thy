@@ -14,7 +14,7 @@ fun evn :: "nat \<Rightarrow> bool" where
 lemma "ev (Suc (Suc (Suc (Suc 0))))"
   apply(rule evSS)
   apply(rule evSS)
-  apply(rule ev0)
+  apply(rule ev0)                                         
   done
 
 lemma "ev m \<Longrightarrow> evn m"
@@ -31,5 +31,10 @@ inductive star :: "('a \<Rightarrow> 'a \<Rightarrow> bool) \<Rightarrow> 'a \<R
 refl:   "star r x x" |
 step:   "r x y \<Longrightarrow> star r y z \<Longrightarrow> star r x z"
 
+lemma star_trans: "star r x y \<Longrightarrow> star r y z \<Longrightarrow> star r x z"
+  apply(induction rule:star.induct)
+   apply(assumption)
+  by (simp add: star.step)
+  
 
 end
